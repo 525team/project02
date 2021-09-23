@@ -1,0 +1,19 @@
+# training samples
+
+该文件以字典的形式包含了两个工况的数据
+包含了“condition0”，“condition1”
+
+每个工况包含了五种故障类型 "Inner race", "Outer race", "Ball", "Holder", "Normal"
+每个故障类型里包含了几段故障信号，并将其拼接在一起
+
+# final_test
+
+该文件包含了未知工况的待测样本
+
+
+# validation samples
+
+该文件包含了一部分的待测工况的辅助标签样本，
+
+# unlabeled support samples
+该文件包含了第三个工况 “condition2”的大量无标签样本 （已打乱）
