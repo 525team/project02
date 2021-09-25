@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument('--method', type=str, default='DA',choices=['DG', 'DA'], help='the name of the method')
     parser.add_argument('--model_name', type=str, default='cnn_features_1d', help='the name of the models')
     parser.add_argument('--data_name', type=str, default='multi_CWRU', help='the name of the data')
-    parser.add_argument('--data_dir', type=str, default='H:\Data\西储大学轴承数据中心网站', help='the directory of the data')
+    parser.add_argument('--data_dir', type=str, default='D:\Data\西储大学轴承数据中心网站', help='the directory of the data')
     parser.add_argument('--transfer_task', type=list, default=[[0,1], [3]], help='transfer learning tasks')
     parser.add_argument('--normlizetype', type=str, default='mean-std', help='nomalization type')
 

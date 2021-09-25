@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # --- training_samples.npy ---
-# read_training_sample = np.load('../2021_manufacturing_competition_data/training_samples.npy', allow_pickle=True).item()
-# condition0_ball = read_training_sample['condition0']['ball']
+read_training_sample = np.load('../2021_manufacturing_competition_data/training_samples.npy', allow_pickle=True).item()
+condition0_ball = read_training_sample['condition0']['ball']
 # condition0_holder = read_training_sample['condition0']['holder']
 # condition0_inner = read_training_sample['condition0']['inner']
 # condition0_normal = read_training_sample['condition0']['normal']
@@ -15,9 +15,9 @@ import matplotlib.pyplot as plt
 # condition1_inner = read_training_sample['condition1']['inner']
 # condition1_normal = read_training_sample['condition1']['normal']
 # condition1_outer = read_training_sample['condition1']['outer']
-# print(read_training_sample['condition0'])
-# plt.plot(condition0_ball)
-# plt.show()
+print(read_training_sample['condition0'])
+plt.plot(condition0_ball)
+plt.show()
 
 
 
