@@ -17,9 +17,9 @@ args = None
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train')
-    # model and data parameters
+    # models and data parameters
     parser.add_argument('--method', type=str, default='DA',choices=['DG', 'DA'], help='the name of the method')
-    parser.add_argument('--model_name', type=str, default='cnn_features_1d', help='the name of the model')
+    parser.add_argument('--model_name', type=str, default='cnn_features_1d', help='the name of the models')
     parser.add_argument('--data_name', type=str, default='multi_CWRU', help='the name of the data')
     parser.add_argument('--data_dir', type=str, default='H:\Data\西储大学轴承数据中心网站', help='the directory of the data')
     parser.add_argument('--transfer_task', type=list, default=[[0,1], [3]], help='transfer learning tasks')
@@ -27,8 +27,8 @@ def parse_args():
 
     # training parameters
     parser.add_argument('--cuda_device', type=str, default='0', help='assign device')
-    parser.add_argument('--checkpoint_dir', type=str, default='.\checkpoint', help='the directory to save the model')
-    parser.add_argument("--pretrained", type=bool, default=False, help='whether to load the pretrained model')
+    parser.add_argument('--checkpoint_dir', type=str, default='.\checkpoint', help='the directory to save the models')
+    parser.add_argument("--pretrained", type=bool, default=False, help='whether to load the pretrained models')
     parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
     parser.add_argument('--num_workers', type=int, default=0, help='the number of training process')
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     args = parse_args()
     os.environ['CUDA_VISIBLE_DEVICES'] = args.cuda_device.strip()
-    # Prepare the saving path for the model
+    # Prepare the saving path for the models
     sub_dir = args.model_name + '_' + datetime.strftime(datetime.now(), '%m%d-%H%M%S')
     if isinstance(args.transfer_task[0], str):
         str_list = eval("".join(args.transfer_task))

@@ -20,7 +20,7 @@ class train_utils(object):
 
     def setup(self):
         """
-        Initialize the datasets, model, loss and optimizer
+        Initialize the datasets, models, loss and optimizer
         :param args:
         :return:
         """
@@ -142,7 +142,7 @@ class train_utils(object):
         self.start_epoch = 0
 
 
-        # Invert the model and define the loss
+        # Invert the models and define the loss
         self.model.to(self.device)
         if args.bottleneck:
             self.bottleneck_layer.to(self.device)
@@ -185,7 +185,7 @@ class train_utils(object):
                 epoch_loss = 0.0
                 epoch_length = 0
 
-                # Set model to train mode or test mode
+                # Set models to train mode or test mode
                 if phase == 'source_train':
                     self.model.train()
                     if args.bottleneck:
@@ -285,14 +285,14 @@ class train_utils(object):
                 logging.info('Epoch: {} {}-Loss: {:.4f} {}-Acc: {:.4f}, Cost {:.1f} sec'.format(
                     epoch, phase, epoch_loss, phase, epoch_acc, time.time() - epoch_start
                 ))
-                # save the model
+                # save the models
                 if phase == 'target_val':
                     # save the checkpoint for other learning
                     model_state_dic = self.model_all.state_dict()
-                    # save the best model according to the val accuracy
+                    # save the best models according to the val accuracy
                     if (epoch_acc > best_acc or epoch > args.max_epoch-2) and (epoch > args.middle_epoch-1):
                         best_acc = epoch_acc
-                        logging.info("save best model epoch {}, acc {:.4f}".format(epoch, epoch_acc))
+                        logging.info("save best models epoch {}, acc {:.4f}".format(epoch, epoch_acc))
                         torch.save(model_state_dic,
                                    os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
 

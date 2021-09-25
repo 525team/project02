@@ -8,7 +8,7 @@ class CNN(nn.Module):
     def __init__(self, pretrained=False, in_channel=1, out_channel=10):
         super(CNN, self).__init__()
         if pretrained == True:
-            warnings.warn("Pretrained model is not available")
+            warnings.warn("Pretrained models is not available")
 
         self.layer1 = nn.Sequential(
             nn.Conv1d(in_channel, 16, kernel_size=15),  # 16, 26 ,26
