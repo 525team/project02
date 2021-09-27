@@ -20,7 +20,7 @@ class train_utils(object):
 
     def setup(self):
         """
-        Initialize the datasets, models, loss and optimizer
+        Initialize the datasets, models1, loss and optimizer
         :param args:
         :return:
         """
@@ -42,10 +42,10 @@ class train_utils(object):
         Dataset = getattr(datasets, args.data_name)
         self.datasets = {}
         if isinstance(args.transfer_task[0], str):
-           #print(args.transfer_task)
+           # print(args.transfer_task)
            args.transfer_task = eval("".join(args.transfer_task))
         self.datasets['source_train'], self.datasets['source_val'], self.datasets['target_train'], self.datasets['target_val'] = Dataset(args.data_dir, args.transfer_task, args.normlizetype).data_split(transfer_learning=True)
-
+        print(1)
 
         self.dataloaders = {x: torch.utils.data.DataLoader(self.datasets[x], batch_size=args.batch_size,
                                                            shuffle=(True if x.split('_')[1] == 'train' else False),
@@ -93,6 +93,7 @@ class train_utils(object):
 
 
         if self.device_count > 1:
+            #torch.nn.DataParallel 多GPU训练
             self.model = torch.nn.DataParallel(self.model)
             if args.bottleneck:
                 self.bottleneck_layer = torch.nn.DataParallel(self.bottleneck_layer)
@@ -126,6 +127,7 @@ class train_utils(object):
             self.optimizer = optim.SGD(parameter_list, lr=args.lr,
                                        momentum=args.momentum, weight_decay=args.weight_decay)
         elif args.opt == 'adam':
+            # adam: Adaptive Moment Estimation
             self.optimizer = optim.Adam(parameter_list, lr=args.lr,
                                         weight_decay=args.weight_decay)
         else:
@@ -308,13 +310,12 @@ class train_utils(object):
                 if phase == 'target_val':
                     # save the checkpoint for other learning
                     model_state_dic = self.model_all.state_dict()
-                    # save the best models according to the val accuracy
+                    # save the best models1 according to the val accuracy
                     if (epoch_acc > best_acc or epoch > args.max_epoch-2) and (epoch > args.middle_epoch-1):
                         best_acc = epoch_acc
-                        logging.info("save best models epoch {}, acc {:.4f}".format(epoch, epoch_acc))
+                        logging.info("save best models1 epoch {}, acc {:.4f}".format(epoch, epoch_acc))
                         torch.save(model_state_dic,
                                    os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
-
 
             if self.lr_scheduler is not None:
                 self.lr_scheduler.step()

@@ -10,30 +10,52 @@ from tqdm import tqdm
 
 #Digital data was collected at 12,000 samples per second
 signal_size = 1024
-dataname= {0:["97.mat","105.mat", "118.mat", "130.mat", "169.mat", "185.mat", "197.mat", "209.mat", "222.mat","234.mat"],  # 1797rpm
-           1:["98.mat","106.mat", "119.mat", "131.mat", "170.mat", "186.mat", "198.mat", "210.mat", "223.mat","235.mat"],  # 1772rpm
-           2:["99.mat","107.mat", "120.mat", "132.mat", "171.mat", "187.mat", "199.mat", "211.mat", "224.mat","236.mat"],  # 1750rpm
-           3:["100.mat","108.mat", "121.mat","133.mat", "172.mat", "188.mat", "200.mat", "212.mat", "225.mat","237.mat"]}  # 1730rpm
+dataname= {0:["t_s_normal0.mat","t_s_ball0.mat", "t_s_holder0.mat", "t_s_inner0.mat", "t_s_outer0.mat"],
+           1:["t_s_normal1.mat","t_s_ball1.mat", "t_s_holder1.mat", "t_s_inner1.mat", "t_s_outer1.mat"],
+           2:["un_supp_s_0.mat","un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
 
-datasetname = ["12k Drive End Bearing Fault Data", "12k Fan End Bearing Fault Data", "48k Drive End Bearing Fault Data",
-               "Normal Baseline Data"]
-axis = ["_DE_time", "_FE_time", "_BA_time"]
+datasetname = ["condition0", "condition1", "condition2"]
+axis = ["slot"]
+label = [i for i in range(0, 5)]
 
-label = [i for i in range(0, 10)]
+# ----------------------------------------------------------------------------------------------------------------------
+# the original dataname
+# dataname= {0:["97.mat","105.mat", "118.mat", "130.mat", "169.mat", "185.mat", "197.mat", "209.mat", "222.mat","234.mat"],  # 1797rpm
+#            1:["98.mat","106.mat", "119.mat", "131.mat", "170.mat", "186.mat", "198.mat", "210.mat", "223.mat","235.mat"],  # 1772rpm
+#            2:["99.mat","107.mat", "120.mat", "132.mat", "171.mat", "187.mat", "199.mat", "211.mat", "224.mat","236.mat"],  # 1750rpm
+#            3:["100.mat","108.mat", "121.mat","133.mat", "172.mat", "188.mat", "200.mat", "212.mat", "225.mat","237.mat"]}  # 1730rpm
+#
+# datasetname = ["12k Drive End Bearing Fault Data", "12k Fan End Bearing Fault Data", "48k Drive End Bearing Fault Data",
+#                "Normal Baseline Data"]
+# axis = ["_DE_time", "_FE_time", "_BA_time"]
+# label = [i for i in range(0, 10)]
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 def get_files(root, N):
     '''
-    This function is used to generate the final training set and test set.
+    This function is used to get normalized data and corresponding label.
     root:The location of the data set
+    N: list, 其他代码中的 source_N / target_N example: N={0,1}, 即工况序列
     '''
     data = []
     lab =[]
     for k in range(len(N)):
         for n in tqdm(range(len(dataname[N[k]]))):
-            if n==0:
-               path1 =os.path.join(root,datasetname[3], dataname[N[k]][n])
-            else:
-                path1 = os.path.join(root,datasetname[0], dataname[N[k]][n])
+            # 确定数据文件名（路径）
+            # if n==0:
+            #    path1 = os.path.join(root, datasetname[3], dataname[N[k]][n])
+            # else:
+            #    path1 = os.path.join(root, datasetname[0], dataname[N[k]][n])
+            path1 = os.path.join(root, datasetname[N[k]], dataname[N[k]][n])
+            # 加载数据
             data1, lab1 = data_load(path1,dataname[N[k]][n],label=label[n])
             lab1=k*100+np.array(lab1)#k是域标签,lab1代表的是类标签
             lab1=lab1.tolist()
@@ -44,16 +66,26 @@ def get_files(root, N):
 
 def data_load(filename, axisname, label):
     '''
-    This function is mainly used to generate test data and training data.
+    This function is mainly used to 加载一种工况下一种故障的_DE_time数据.
+    comment：这里的axisname命名不准确，实际发挥dataname，数据文件名的作用。
     filename:Data location
     axisname:Select which channel's data,---->"_DE_time","_FE_time","_BA_time"
     '''
-    datanumber = axisname.split(".")
-    if eval(datanumber[0]) < 100:
-        realaxis = "X0" + datanumber[0] + axis[0]
-    else:
-        realaxis = "X" + datanumber[0] + axis[0]
-    fl = loadmat(filename)[realaxis]
+    # example： datanumber ['97', 'mat']
+    # datanumber = axisname.split(".")
+    # generate the column name of the data in the .mat file
+
+    # if eval(datanumber[0]) < 2:
+    # if eval(datanumber[0]) < 100:
+    #     # axis[0] 实际就是'_DE_time'
+    #     realaxis = "X0" + datanumber[0] + axis[0]
+    # else:
+    #     realaxis = "X" + datanumber[0] + axis[0]
+    # actually load the data
+
+
+    # realaxis may be 1 or 0, need test
+    fl = loadmat(filename)['Data']
     data = []
     lab = []
     start, end = 0, signal_size

@@ -19,8 +19,3 @@ from datasets.multi_CWRU_FFT import CWRUFFT as multi_CWRU_FFT
 #
 # from datasets.SEU import Md as SEU
 # from datasets.SEUFFT import Md as SEUFFT
-#
-#
-# from datasets.PHM import PHM
-# from datasets.PHMFFT import PHMFFT
-# from datasets.multi_PHM import PHM as multi_PHM

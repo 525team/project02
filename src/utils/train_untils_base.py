@@ -25,7 +25,7 @@ class train_utils(object):
 
     def setup(self):
         """
-        Initialize the datasets, models, loss and optimizer
+        Initialize the datasets, models1, loss and optimizer
         :param args:
         :return:
         """
@@ -102,7 +102,7 @@ class train_utils(object):
 
         self.start_epoch = 0
 
-        # Invert the models and define the loss
+        # Invert the models1 and define the loss
         self.model.to(self.device)
         if args.adabn:
             self.model_eval.to(self.device)
@@ -142,7 +142,7 @@ class train_utils(object):
                 epoch_acc = 0
                 epoch_loss = 0.0
 
-                # Set models to train mode or test mode
+                # Set models1 to train mode or test mode
                 if phase != 'target_val':
                     if phase=='source_train':
                        self.model.train()
@@ -237,14 +237,14 @@ class train_utils(object):
                 ))
 
 
-                # save the models
+                # save the models1
                 if phase == 'target_val':
                     # save the checkpoint for other learning
                     model_state_dic = self.model.module.state_dict() if self.device_count > 1 else self.model.state_dict()
-                    # save the best models according to the val accuracy
+                    # save the best models1 according to the val accuracy
                     if epoch_acc > best_acc or epoch > args.max_epoch-2:
                         best_acc = epoch_acc
-                        logging.info("save best models epoch {}, acc {:.4f}".format(epoch, epoch_acc))
+                        logging.info("save best models1 epoch {}, acc {:.4f}".format(epoch, epoch_acc))
                         torch.save(model_state_dic,
                                    os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
 

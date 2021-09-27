@@ -10,14 +10,14 @@ import torch
 from torch import nn
 from torch import optim
 
-import models
+import models1
 import datasets
 from loss.DAN import DAN
 from loss.JAN import JAN
 from loss.CORAL import CORAL
-from utils.entropy_CDA import Entropy
-from utils.entropy_CDA import calc_coeff
-from utils.entropy_CDA import grl_hook
+from util.entropy_CDA import Entropy
+from util.entropy_CDA import calc_coeff
+from util.entropy_CDA import grl_hook
 class train_utils(object):
     def __init__(self, args, save_dir):
         self.args = args
@@ -25,7 +25,7 @@ class train_utils(object):
 
     def setup(self):
         """
-        Initialize the datasets, models, loss and optimizer
+        Initialize the datasets, models1, loss and optimizer
         :param args:
         :return:
         """
@@ -60,8 +60,8 @@ class train_utils(object):
                                                            drop_last=(True if args.last_batch and x.split('_')[1] == 'train' else False))
                             for x in ['source_train', 'source_val', 'target_train', 'target_val']}
 
-        # Define the models
-        self.model = getattr(models, args.model_name)(args.pretrained)
+        # Define the models1
+        self.model = getattr(models1, args.model_name)(args.pretrained)
         if args.bottleneck:
             self.bottleneck_layer = nn.Sequential(nn.Linear(self.model.output_num(), args.bottleneck_num),
                                                   nn.ReLU(inplace=True), nn.Dropout())
@@ -75,30 +75,30 @@ class train_utils(object):
             self.max_iter = len(self.dataloaders['source_train'])*(args.max_epoch-args.middle_epoch)
             if args.adversarial_loss == "CDA" or args.adversarial_loss == "CDA+E":
                 if args.bottleneck:
-                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=args.bottleneck_num*Dataset.num_classes,
-                                                                            hidden_size=args.hidden_size, max_iter=self.max_iter,
-                                                                            trade_off_adversarial=args.trade_off_adversarial,
-                                                                            lam_adversarial=args.lam_adversarial
-                                                                            )
+                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=args.bottleneck_num * Dataset.num_classes,
+                                                                             hidden_size=args.hidden_size, max_iter=self.max_iter,
+                                                                             trade_off_adversarial=args.trade_off_adversarial,
+                                                                             lam_adversarial=args.lam_adversarial
+                                                                             )
                 else:
-                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=self.model.output_num()*Dataset.num_classes,
-                                                                            hidden_size=args.hidden_size, max_iter=self.max_iter,
-                                                                            trade_off_adversarial=args.trade_off_adversarial,
-                                                                            lam_adversarial=args.lam_adversarial
-                                                                            )
+                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=self.model.output_num() * Dataset.num_classes,
+                                                                             hidden_size=args.hidden_size, max_iter=self.max_iter,
+                                                                             trade_off_adversarial=args.trade_off_adversarial,
+                                                                             lam_adversarial=args.lam_adversarial
+                                                                             )
             else:
                 if args.bottleneck_num:
-                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=args.bottleneck_num,
-                                                                            hidden_size=args.hidden_size, max_iter=self.max_iter,
-                                                                            trade_off_adversarial=args.trade_off_adversarial,
-                                                                            lam_adversarial=args.lam_adversarial
-                                                                            )
+                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=args.bottleneck_num,
+                                                                             hidden_size=args.hidden_size, max_iter=self.max_iter,
+                                                                             trade_off_adversarial=args.trade_off_adversarial,
+                                                                             lam_adversarial=args.lam_adversarial
+                                                                             )
                 else:
-                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=self.model.output_num(),
-                                                                            hidden_size=args.hidden_size, max_iter=self.max_iter,
-                                                                            trade_off_adversarial=args.trade_off_adversarial,
-                                                                            lam_adversarial=args.lam_adversarial
-                                                                            )
+                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=self.model.output_num(),
+                                                                             hidden_size=args.hidden_size, max_iter=self.max_iter,
+                                                                             trade_off_adversarial=args.trade_off_adversarial,
+                                                                             lam_adversarial=args.lam_adversarial
+                                                                             )
 
 
         if self.device_count > 1:
@@ -159,7 +159,7 @@ class train_utils(object):
         self.start_epoch = 0
 
 
-        # Invert the models and define the loss
+        # Invert the models1 and define the loss
         self.model.to(self.device)
         if args.bottleneck:
             self.bottleneck_layer.to(self.device)
@@ -235,7 +235,7 @@ class train_utils(object):
                 epoch_loss = 0.0
                 epoch_length = 0
 
-                # Set models to train mode or test mode
+                # Set models1 to train mode or test mode
                 if phase == 'source_train':
                     self.model.train()
                     if args.bottleneck:
@@ -412,14 +412,14 @@ class train_utils(object):
                 logging.info('Epoch: {} {}-Loss: {:.4f} {}-Acc: {:.4f}, Cost {:.1f} sec'.format(
                     epoch, phase, epoch_loss, phase, epoch_acc, time.time() - epoch_start
                 ))
-                # save the models
+                # save the models1
                 if phase == 'target_val':
                     # save the checkpoint for other learning
                     model_state_dic = self.model_all.state_dict()
-                    # save the best models according to the val accuracy
+                    # save the best models1 according to the val accuracy
                     if (epoch_acc > best_acc or epoch > args.max_epoch-2) and (epoch > args.middle_epoch-1):
                         best_acc = epoch_acc
-                        logging.info("save best models epoch {}, acc {:.4f}".format(epoch, epoch_acc))
+                        logging.info("save best models1 epoch {}, acc {:.4f}".format(epoch, epoch_acc))
                         torch.save(model_state_dic,
                                    os.path.join(self.save_dir, '{}-{:.4f}-best_model.pth'.format(epoch, best_acc)))
 

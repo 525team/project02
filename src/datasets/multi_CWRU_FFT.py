@@ -10,17 +10,14 @@ from tqdm import tqdm
 
 #Digital data was collected at 12,000 samples per second
 signal_size = 1024
+dataname= {0:["t_s_normal0.mat","t_s_ball0.mat", "t_s_holder0.mat", "t_s_inner0.mat", "t_s_outer0.mat"],
+           1:["t_s_normal1.mat","t_s_ball1.mat", "t_s_holder1.mat", "t_s_inner1.mat", "t_s_outer1.mat"],
+           2:["un_supp_s_0.mat","un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
 
-dataname= {0:["97.mat","105.mat", "118.mat", "130.mat", "169.mat", "185.mat", "197.mat", "209.mat", "222.mat","234.mat"],  # 1797rpm
-           1:["98.mat","106.mat", "119.mat", "131.mat", "170.mat", "186.mat", "198.mat", "210.mat", "223.mat","235.mat"],  # 1772rpm
-           2:["99.mat","107.mat", "120.mat", "132.mat", "171.mat", "187.mat", "199.mat", "211.mat", "224.mat","236.mat"],  # 1750rpm
-           3:["100.mat","108.mat", "121.mat","133.mat", "172.mat", "188.mat", "200.mat", "212.mat", "225.mat","237.mat"]}  # 1730rpm
+datasetname = ["condition0", "condition1", "condition2"]
+axis = ["slot"]
 
-datasetname = ["12k Drive End Bearing Fault Data", "12k Fan End Bearing Fault Data", "48k Drive End Bearing Fault Data",
-               "Normal Baseline Data"]
-axis = ["_DE_time", "_FE_time", "_BA_time"]
-
-label = [i for i in range(0, 10)]
+label = [i for i in range(0, 5)]
 
 def get_files(root, N):
     '''
@@ -32,9 +29,9 @@ def get_files(root, N):
     for k in range(len(N)):
         for n in tqdm(range(len(dataname[N[k]]))):
             if n==0:
-               path1 =os.path.join(root,datasetname[3], dataname[N[k]][n])
+               path1 =os.path.join(root,datasetname[0], dataname[N[k]][n])
             else:
-                path1 = os.path.join(root,datasetname[0], dataname[N[k]][n])
+                path1 = os.path.join(root,datasetname[1], dataname[N[k]][n])
             data1, lab1 = data_load(path1,dataname[N[k]][n],label=label[n])
             lab1 = k * 100 + np.array(lab1)  # k是域标签,lab1代表的是类标签
             lab1 = lab1.tolist()
@@ -51,7 +48,7 @@ def data_load(filename, axisname, label):
     axisname:Select which channel's data,---->"_DE_time","_FE_time","_BA_time"
     '''
     datanumber = axisname.split(".")
-    if eval(datanumber[0]) < 100:
+    if eval(datanumber[0]) < 2:
         realaxis = "X0" + datanumber[0] + axis[0]
     else:
         realaxis = "X" + datanumber[0] + axis[0]
