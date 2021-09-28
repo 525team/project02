@@ -9,34 +9,34 @@ class CNN(nn.Module):
     def __init__(self, pretrained=False, in_channel=1, out_channel=10):
         super(CNN, self).__init__()
         if pretrained == True:
-            warnings.warn("Pretrained models1 is not available")
+            warnings.warn("Pretrained models is not available")
 
         self.layer1 = nn.Sequential(
-            nn.Conv1d(in_channel, 16, kernel_size=15),  # 16, 26 ,26
+            nn.Conv1d(in_channel, 16, kernel_size=15),  # 16, 1010
             nn.BatchNorm1d(16),
             nn.ReLU(inplace=True))
 
 
         self.layer2 = nn.Sequential(
-            nn.Conv1d(16, 32, kernel_size=3),  # 32, 24, 24
+            nn.Conv1d(16, 32, kernel_size=3),  # 32, 1008
             nn.BatchNorm1d(32),
             nn.ReLU(inplace=True),
             nn.MaxPool1d(kernel_size=2, stride=2),
-            )  # 32, 12,12     (24-2) /2 +1
+            )  # 32,504
 
         self.layer3 = nn.Sequential(
-            nn.Conv1d(32, 64, kernel_size=3),  # 64,10,10
+            nn.Conv1d(32, 64, kernel_size=3),  # 64, 502
             nn.BatchNorm1d(64),
             nn.ReLU(inplace=True))
 
         self.layer4 = nn.Sequential(
-            nn.Conv1d(64, 128, kernel_size=3),  # 128,8,8
+            nn.Conv1d(64, 128, kernel_size=3),  # 128,500
             nn.BatchNorm1d(128),
             nn.ReLU(inplace=True),
-            nn.AdaptiveMaxPool1d(4))  # 128, 4,4
+            nn.AdaptiveMaxPool1d(4))  # 128, 4
 
         self.layer5 = nn.Sequential(
-            nn.Linear(128 * 4, 256),
+            nn.Linear(128 * 4, 256), #全连接层作为分类器，输入特征数128*4，
             nn.ReLU(inplace=True),
             nn.Dropout())
 

@@ -1,21 +1,11 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
 
-from datasets.CWRU import CWRU
-from datasets.CWRUFFT import CWRUFFT
-from datasets.multi_CWRU import CWRU as multi_CWRU
-from datasets.multi_CWRU_FFT import CWRUFFT as multi_CWRU_FFT
-# from datasets.multi_CWRU_try import CWRU as multi_CWRU_try
+from src.datasets.CWRU import CWRU
+from src.datasets.CWRUFFT import CWRUFFT
+from src.datasets.multi_CWRU import CWRU as multi_CWRU
+from src.datasets.multi_CWRU_FFT import CWRUFFT as multi_CWRU_FFT
 
-# from datasets.PU import PU
-# from datasets.PUFFT import PUFFT
-#
-# from datasets.PU_type import PU_type
-# from datasets.PUFFT_type import PUFFT_type
-#
-# from datasets.JNU import JNU
-# from datasets.JNUFFT import JNUFFT
-#
-#
-# from datasets.SEU import Md as SEU
-# from datasets.SEUFFT import Md as SEUFFT
+from src.datasets.competition import competition as competition_1
+from src.datasets.competition_FFT import competition_FFT as competition_1_FFT
+

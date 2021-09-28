@@ -11,8 +11,8 @@ from torch import nn
 from torch import optim
 import numpy as np
 import random
-import models
-import datasets
+from src import models
+from src import datasets
 class train_utils(object):
     def __init__(self, args, save_dir):
         self.args = args
@@ -20,7 +20,7 @@ class train_utils(object):
 
     def setup(self):
         """
-        Initialize the datasets, models1, loss and optimizer
+        Initialize the datasets, models, loss and optimizer
         :param args:
         :return:
         """
@@ -45,7 +45,6 @@ class train_utils(object):
            # print(args.transfer_task)
            args.transfer_task = eval("".join(args.transfer_task))
         self.datasets['source_train'], self.datasets['source_val'], self.datasets['target_train'], self.datasets['target_val'] = Dataset(args.data_dir, args.transfer_task, args.normlizetype).data_split(transfer_learning=True)
-        print(1)
 
         self.dataloaders = {x: torch.utils.data.DataLoader(self.datasets[x], batch_size=args.batch_size,
                                                            shuffle=(True if x.split('_')[1] == 'train' else False),
@@ -53,7 +52,7 @@ class train_utils(object):
                                                            pin_memory=(True if self.device == 'cuda' else False),
                                                            drop_last=(True if args.last_batch and x.split('_')[1] == 'train' else False))
                             for x in ['source_train', 'source_val', 'target_val']}
-        self.dataloaders[ 'target_train']=torch.utils.data.DataLoader(self.datasets['target_train'],
+        self.dataloaders['target_train']=torch.utils.data.DataLoader(self.datasets['target_train'],
                                                            batch_size=args.batch_size//len(args.transfer_task[0]),#batch中不同类的样本平衡
                                                            shuffle=True,
                                                            num_workers=args.num_workers,
@@ -187,6 +186,7 @@ class train_utils(object):
             else:
                 logging.info('current lr: {}'.format(args.lr))
 
+            # 为什么 len_target_loader = 6?
             iter_target = iter(self.dataloaders['target_train'])
             len_target_loader = len(self.dataloaders['target_train'])
             # Each epoch has a training and val phase
@@ -199,6 +199,7 @@ class train_utils(object):
 
                 # Set models to train mode or test mode
                 if phase == 'source_train':
+                    # self.model.train 是啥？
                     self.model.train()
                     if args.bottleneck:
                         self.bottleneck_layer.train()
@@ -215,6 +216,7 @@ class train_utils(object):
 
                 for batch_idx, (inputs, labels_temp) in enumerate(self.dataloaders[phase]):
                     if phase != 'source_train' or epoch < args.middle_epoch:
+
                         inputs = inputs.to(self.device)
                         labels_temp = labels_temp.to(self.device)
                     else:
@@ -225,6 +227,7 @@ class train_utils(object):
                         inputs = torch.cat((source_inputs, target_inputs), dim=0)
                         inputs = inputs.to(self.device)
                         labels_temp = labels_temp.to(self.device)
+                    # labels和ds_labels分别代表故障种类标签和域标签，进行了标签分离，如204分离为04和2
                     labels=labels_temp.long()%100
                     ds_labels=labels_temp.long()//100
                     # if phase == 'source_train' and epoch > args.middle_epoch:
@@ -259,7 +262,7 @@ class train_utils(object):
                             else:
                                 adversarial_loss = 0
 
-                            loss = classifier_loss +  adversarial_loss
+                            loss = classifier_loss + adversarial_loss
 
 
                         pred = logits.argmax(dim=1)

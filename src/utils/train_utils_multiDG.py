@@ -11,8 +11,8 @@ from torch import nn
 from torch import optim
 import numpy as np
 import random
-import models
-import datasets
+from src import models
+from src import datasets
 class train_utils(object):
     def __init__(self, args, save_dir):
         self.args = args

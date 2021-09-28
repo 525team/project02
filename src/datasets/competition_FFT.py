@@ -9,14 +9,15 @@ from src.datasets.sequence_aug import *
 from tqdm import tqdm
 
 #Digital data was collected at 12,000 samples per second
+#Digital data was collected at 12,000 samples per second
 signal_size = 1024
-dataname= {0:["t_s_normal0.mat","t_s_ball0.mat", "t_s_holder0.mat", "t_s_inner0.mat", "t_s_outer0.mat"],
-           1:["t_s_normal1.mat","t_s_ball1.mat", "t_s_holder1.mat", "t_s_inner1.mat", "t_s_outer1.mat"],
-           2:["un_supp_s_0.mat","un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
+
+dataname= {0:["t_s_inner0.mat", "t_s_outer0.mat","t_s_ball0.mat", "t_s_holder0.mat", "t_s_normal0.mat"],
+           1:["t_s_inner1.mat", "t_s_outer1.mat", "t_s_ball1.mat", "t_s_holder1.mat", "t_s_normal1.mat"],
+           2:["un_supp_s_0.mat", "un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
 
 datasetname = ["condition0", "condition1", "condition2"]
 axis = ["slot"]
-
 label = [i for i in range(0, 5)]
 
 def get_files(root, N):
@@ -28,10 +29,7 @@ def get_files(root, N):
     lab =[]
     for k in range(len(N)):
         for n in tqdm(range(len(dataname[N[k]]))):
-            if n==0:
-               path1 =os.path.join(root,datasetname[0], dataname[N[k]][n])
-            else:
-                path1 = os.path.join(root,datasetname[1], dataname[N[k]][n])
+            path1 = os.path.join(root, datasetname[N[k]], dataname[N[k]][n])
             data1, lab1 = data_load(path1,dataname[N[k]][n],label=label[n])
             lab1 = k * 100 + np.array(lab1)  # k是域标签,lab1代表的是类标签
             lab1 = lab1.tolist()
@@ -48,11 +46,7 @@ def data_load(filename, axisname, label):
     axisname:Select which channel's data,---->"_DE_time","_FE_time","_BA_time"
     '''
     datanumber = axisname.split(".")
-    if eval(datanumber[0]) < 2:
-        realaxis = "X0" + datanumber[0] + axis[0]
-    else:
-        realaxis = "X" + datanumber[0] + axis[0]
-    fl = loadmat(filename)[realaxis]
+    fl = loadmat(filename)["Data"]
     fl = fl.reshape(-1,)
     data = []
     lab = []
@@ -67,11 +61,11 @@ def data_load(filename, axisname, label):
         lab.append(label)
         start += signal_size
         end += signal_size
-
     return data, lab
 
+
 #--------------------------------------------------------------------------------------------------------------------
-class CWRUFFT(object):
+class competition_FFT(object):
     num_classes = 10
     inputchannel = 1
     def __init__(self, data_dir, transfer_task, normlizetype="0-1"):
@@ -129,6 +123,3 @@ class CWRUFFT(object):
             return source_train, source_val, target_val
 
 
-"""
-    def data_split(self):
-"""

@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import torch
 from sklearn.model_selection import train_test_split
-from datasets.SequenceDatasets import dataset
-from datasets.sequence_aug import *
+from src.datasets.SequenceDatasets import dataset
+from src.datasets.sequence_aug import *
 from tqdm import tqdm
 
 #Digital data was collected at 12,000 samples per second

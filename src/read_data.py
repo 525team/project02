@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import io
@@ -71,16 +72,17 @@ from scipy import io
 #     io.savemat('unl_supp_s_4.mat',{'Data': unl_support_samples_4})
 
 # print(unl_support_samples_0)
+
 # --- validation_samples.npy ---  9*1024
-read_validation_samples = np.load('../2021_manufacturing_competition_data/validation_samples.npy', allow_pickle=True).item()
-validation_samples_ball = read_validation_samples['ball']
-validation_samples_holder = read_validation_samples['holder']
-validation_samples_inner = read_validation_samples['inner']
-validation_samples_normal = read_validation_samples['normal']
-validation_samples_outer = read_validation_samples['outer']
-io.savemat('val_s.mat',{'Data': read_validation_samples})
-io.savemat('val_s_ball.mat',{'Data': validation_samples_ball})
-io.savemat('val_s_holder.mat',{'Data': validation_samples_holder})
-io.savemat('val_s_inner.mat',{'Data': validation_samples_inner})
-io.savemat('val_s_normal.mat',{'Data': validation_samples_normal})
-io.savemat('val_s_outer.mat',{'Data': validation_samples_outer})
+# read_validation_samples = np.load('../2021_manufacturing_competition_data/validation_samples.npy', allow_pickle=True).item()
+# validation_samples_ball = read_validation_samples['ball']
+# validation_samples_holder = read_validation_samples['holder']
+# validation_samples_inner = read_validation_samples['inner']
+# validation_samples_normal = read_validation_samples['normal']
+# validation_samples_outer = read_validation_samples['outer']
+#
+# io.savemat("./data_files/validation_samples/val_s_ball.mat", {'Data': validation_samples_ball})
+# io.savemat("./data_files/validation_samples/val_s_holder.mat", {'Data': validation_samples_holder})
+# io.savemat("./data_files/validation_samples/val_s_inner.mat", {'Data': validation_samples_inner})
+# io.savemat("./data_files/validation_samples/val_s_normal.mat", {'Data': validation_samples_normal})
+# io.savemat("./data_files/validation_samples/val_s_outer.mat", {'Data': validation_samples_outer})

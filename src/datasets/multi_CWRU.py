@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 import torch
 from sklearn.model_selection import train_test_split
-from datasets.SequenceDatasets import dataset
-from datasets.sequence_aug import *
+from src.datasets.SequenceDatasets import dataset
+from src.datasets.sequence_aug import *
 from tqdm import tqdm
 
 #Digital data was collected at 12,000 samples per second
@@ -99,7 +99,7 @@ def data_load(filename, axisname, label):
 
 #--------------------------------------------------------------------------------------------------------------------
 class CWRU(object):
-    num_classes = 10
+    num_classes = 5
     inputchannel = 1
     def __init__(self, data_dir, transfer_task, normlizetype="0-1"):
         self.data_dir = data_dir
