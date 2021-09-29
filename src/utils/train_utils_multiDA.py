@@ -305,10 +305,10 @@ class train_utils(object):
 
                 epoch_loss = epoch_loss / epoch_length
                 epoch_acc = epoch_acc / epoch_length
-
-                logging.info('Epoch: {} {}-Loss: {:.4f} {}-Acc: {:.4f}, Cost {:.1f} sec'.format(
-                    epoch, phase, epoch_loss, phase, epoch_acc, time.time() - epoch_start
-                ))
+                if phase == 'source_val':
+                    logging.info('Epoch: {} {}-Loss: {:.4f} {}-Acc: {:.4f}, Cost {:.1f} sec'.format(
+                        epoch, phase, epoch_loss, phase, epoch_acc, time.time() - epoch_start
+                    ))
                 # save the models
                 if phase == 'target_val':
                     # save the checkpoint for other learning

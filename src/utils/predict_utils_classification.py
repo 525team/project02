@@ -2,12 +2,7 @@ import torch
 import numpy as np
 import os
 from scipy import io
-import models
-
-
-# Model Configuration
-PATH = '.\checkpoint\DA\s_0_1_t2\cnn_features_1d_0927-190704\8-0.3333-best_model.pth'
-# trained_model = cnn_1d.CNN()
+import src.models as models
 
 # new version of load validation data
 read_validation_samples = np.load('../2021_manufacturing_competition_data/validation_samples.npy', allow_pickle=True).item()
@@ -39,6 +34,7 @@ class predict_utils_classification():
             for i in range(fault_num):
                 correct_i = 0
                 for j in range(val_sample_num_per_fault):
+                    # 下面这行代码我不确定
                     label_output = self.model(read_validation_samples[fault_name[i]][j])
                     if label_output == i:
                         correct_i += 1

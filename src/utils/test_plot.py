@@ -22,11 +22,11 @@ label = [i for i in range(0, 5)]
 
 
 root = 'D:\Data\condition'
-def data_load(filename, axisname, label):
+def data_load(filename, axisname, label, iteration):
     fl = loadmat(filename)["Data"]
     fl = fl.reshape(-1, )
 
-    start, end = 0, signal_size
+    start, end = 0 + signal_size * iteration, signal_size
     x = fl[start:end]
     x = np.fft.fft(x)
     x = np.abs(x) / len(x)
@@ -39,12 +39,13 @@ name = ['0', 'Inner race', 'Outer race', 'Ball', 'Holder', 'Normal']
 
 fig = plt.figure()
 fig.subplots_adjust(hspace=0.4, wspace=0.4)
-for i in range(1, 6):
-    x = data_load(os.path.join(root, datasetname[0], dataname[0][i - 1]), dataname[0][i - 1], label=None)
-    ax = fig.add_subplot(2, 3, i)
-    ax.plot(x)
-    ax.set_title(name[i])
-    ax.text(0.5, 0.5, str((2, 3, i)),
-            fontsize=18, ha='center')
-
-plt.show()
+for j in range(1,6):
+    for i in range(1, 51):
+        x = data_load(os.path.join(root, datasetname[2], dataname[2][j - 1]), dataname[2][j - 1], label=None, )
+        ax = fig.add_subplot(10, 5, i)
+        ax.plot(x)
+        # ax.set_title(name[i])
+        ax.text(0.5, 0.5, str((10, 5, i)),
+                fontsize=18, ha='center')
+    plt.show()
+    print(1)

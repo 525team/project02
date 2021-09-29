@@ -15,6 +15,8 @@ dataname= {0:["t_s_inner0.mat", "t_s_outer0.mat","t_s_ball0.mat", "t_s_holder0.m
            1:["t_s_inner1.mat", "t_s_outer1.mat", "t_s_ball1.mat", "t_s_holder1.mat", "t_s_normal1.mat"],
            2:["un_supp_s_0.mat", "un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
 
+fault_name = ['inner', 'outer', 'ball', 'holder', 'normal']
+
 datasetname = ["condition0", "condition1", "condition2"]
 axis = ["slot"]
 label = [i for i in range(0, 5)]
