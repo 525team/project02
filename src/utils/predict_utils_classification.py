@@ -61,15 +61,20 @@ class predict_utils_classification():
             for i in range(fault_num):
                 correct_i = 0
                 for j in range(val_sample_num_per_fault):
-                    inputs = torch.from_numpy(read_validation_samples[fault_name[i]][j])
+                    inputs = np.array([[read_validation_samples[fault_name[i]][j]]]).astype(np.float32)  # dtype=np.double
+                    # inputs = np.array([[read_validation_samples[fault_name[i]][j]]])
+                    inputs = torch.from_numpy(inputs)
                     inputs = inputs.to(self.device)
-                    label_output = self.model_all(inputs)
+                    outputs = self.model_all(inputs)
+                    label_output = torch.max(outputs, 1)[1].data.numpy()
                     if label_output == i:
                         correct_i += 1
                 correct.append(correct_i)
 
-            correct_rate = correct / val_sample_num_per_fault
+            correct_rate = np.array(correct) / val_sample_num_per_fault
             correct_rate_overall = sum(correct_rate) / fault_num
+            print(correct_rate)
+            print(correct_rate_overall)
         return correct_rate_overall, correct_rate
 
 
