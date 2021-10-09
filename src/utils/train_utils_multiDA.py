@@ -44,7 +44,7 @@ class train_utils(object):
         if isinstance(args.transfer_task[0], str):
            # print(args.transfer_task)
            args.transfer_task = eval("".join(args.transfer_task))
-        self.datasets['source_train'], self.datasets['source_val'], self.datasets['target_train'], self.datasets['target_val'] = Dataset(args.data_dir, args.transfer_task, args.normlizetype).data_split(transfer_learning=True)
+        self.datasets['source_train'], self.datasets['source_val'], self.datasets['target_train'], self.datasets['target_val'] = Dataset(args.data_dir, args.transfer_task, args.normalizetype).data_split(transfer_learning=True)
 
         self.dataloaders = {x: torch.utils.data.DataLoader(self.datasets[x], batch_size=args.batch_size,
                                                            shuffle=(True if x.split('_')[1] == 'train' else False),
@@ -264,8 +264,9 @@ class train_utils(object):
 
                             loss = classifier_loss + adversarial_loss
 
-
+                        #logits是（a,b）的张量，a是全连接输出维度，b是batch中样本的数目，argmax中dim=1，张量中最大值所在索引
                         pred = logits.argmax(dim=1)
+                        #torch.eq,返回batch维的bool值,sum真值的个数，item浮点数从列表中取出来，pre与labels对比，变为True,false,sum统计true的个数
                         correct = torch.eq(pred, labels).float().sum().item()
                         loss_temp = classifier_loss.item() * labels.size(0)#只是一个分类的
                         epoch_loss += loss_temp

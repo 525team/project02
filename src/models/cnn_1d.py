@@ -6,7 +6,7 @@ import warnings
 
 # ----------------------------inputsize >=28-------------------------------------------------------------------------
 class CNN(nn.Module):
-    def __init__(self, pretrained=False, in_channel=1, out_channel=10):
+    def __init__(self, pretrained=False, in_channel=1, out_channel=5):
         super(CNN, self).__init__()
         if pretrained == True:
             warnings.warn("Pretrained models is not available")

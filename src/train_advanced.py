@@ -22,18 +22,18 @@ def parse_args():
     # models1 and data parameters
     parser.add_argument('--method', type=str, default='DA',choices=['DG', 'DA'], help='the name of the method')
     parser.add_argument('--model_name', type=str, default='cnn_features_1d', help='the name of the models')
-    parser.add_argument('--data_name', type=str, default='competition_1', help='the name of the data')
+    parser.add_argument('--data_name', type=str, default='competition_1_FFT', help='the name of the data')
     # parser.add_argument('--data_name', type=str, default='competition_1_FFT', help='the name of the data')
     parser.add_argument('--data_dir', type=str, default='D:\Data\condition', help='the directory of the data')
     parser.add_argument('--transfer_task', type=list, default=[[0,1], [2]], help='transfer learning tasks')
-    parser.add_argument('--normlizetype', type=str, default='mean-std', help='nomalization type')
+    parser.add_argument('--normalizetype', type=str, default='mean-std', help='normalization type')
 
     # training parameters
     parser.add_argument('--cuda_device', type=str, default='0', help='assign device')
     parser.add_argument('--checkpoint_dir', type=str, default='.\checkpoint', help='the directory to save the models')
     parser.add_argument("--pretrained", type=bool, default=False, help='whether to load the pretrained models')
     parser.add_argument('--batch_size', type=int, default=64, help='batchsize of the training process')
-    parser.add_argument('--num_workers', type=int, default=0, help='the number of training process')
+    parser.add_argument('--num_workers', type=int, default=0, help='the number of training process')#这里为什么等于零
 
     parser.add_argument('--bottleneck', type=bool, default=True, help='whether using the bottleneck layer')
     parser.add_argument('--bottleneck_num', type=int, default=256, help='whether using the bottleneck layer')
@@ -61,8 +61,8 @@ def parse_args():
     parser.add_argument('--steps', type=str, default='150, 250', help='the learning rate decay for step and stepLR')
 
     # save, load and display information
-    parser.add_argument('--middle_epoch', type=int, default=10, help='max number of epoch')
-    parser.add_argument('--max_epoch', type=int, default=100, help='max number of epoch')
+    parser.add_argument('--middle_epoch', type=int, default=50, help='max number of epoch')
+    parser.add_argument('--max_epoch', type=int, default=300, help='max number of epoch')
     parser.add_argument('--print_step', type=int, default=100, help='the interval of log training information')
 
     args = parser.parse_args()

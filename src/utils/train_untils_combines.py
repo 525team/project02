@@ -10,8 +10,8 @@ import torch
 from torch import nn
 from torch import optim
 
-import models1
-import datasets
+from src import models
+from src import datasets
 from loss.DAN import DAN
 from loss.JAN import JAN
 from loss.CORAL import CORAL
@@ -25,7 +25,7 @@ class train_utils(object):
 
     def setup(self):
         """
-        Initialize the datasets, models1, loss and optimizer
+        Initialize the datasets, models, loss and optimizer
         :param args:
         :return:
         """
@@ -75,26 +75,26 @@ class train_utils(object):
             self.max_iter = len(self.dataloaders['source_train'])*(args.max_epoch-args.middle_epoch)
             if args.adversarial_loss == "CDA" or args.adversarial_loss == "CDA+E":
                 if args.bottleneck:
-                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=args.bottleneck_num * Dataset.num_classes,
+                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=args.bottleneck_num * Dataset.num_classes,
                                                                              hidden_size=args.hidden_size, max_iter=self.max_iter,
                                                                              trade_off_adversarial=args.trade_off_adversarial,
                                                                              lam_adversarial=args.lam_adversarial
                                                                              )
                 else:
-                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=self.model.output_num() * Dataset.num_classes,
+                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=self.model.output_num() * Dataset.num_classes,
                                                                              hidden_size=args.hidden_size, max_iter=self.max_iter,
                                                                              trade_off_adversarial=args.trade_off_adversarial,
                                                                              lam_adversarial=args.lam_adversarial
                                                                              )
             else:
                 if args.bottleneck_num:
-                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=args.bottleneck_num,
+                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=args.bottleneck_num,
                                                                              hidden_size=args.hidden_size, max_iter=self.max_iter,
                                                                              trade_off_adversarial=args.trade_off_adversarial,
                                                                              lam_adversarial=args.lam_adversarial
                                                                              )
                 else:
-                    self.AdversarialNet = getattr(models1, 'AdversarialNet')(in_feature=self.model.output_num(),
+                    self.AdversarialNet = getattr(models, 'AdversarialNet')(in_feature=self.model.output_num(),
                                                                              hidden_size=args.hidden_size, max_iter=self.max_iter,
                                                                              trade_off_adversarial=args.trade_off_adversarial,
                                                                              lam_adversarial=args.lam_adversarial

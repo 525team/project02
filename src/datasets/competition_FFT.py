@@ -14,7 +14,9 @@ signal_size = 1024
 
 dataname= {0:["t_s_inner0.mat", "t_s_outer0.mat","t_s_ball0.mat", "t_s_holder0.mat", "t_s_normal0.mat"],
            1:["t_s_inner1.mat", "t_s_outer1.mat", "t_s_ball1.mat", "t_s_holder1.mat", "t_s_normal1.mat"],
-           2:["un_supp_s_0.mat", "un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
+           # 2:["un_supp_s_0.mat", "un_supp_s_1.mat", "un_supp_s_2.mat", "un_supp_s_3.mat", "un_supp_s_4.mat"]}
+           2:["val_s_inner.mat", "val_s_outer.mat", "val_s_ball.mat", "val_s_holder.mat", "val_s_normal.mat"]}
+
 
 datasetname = ["condition0", "condition1", "condition2"]
 axis = ["slot"]
@@ -66,7 +68,9 @@ def data_load(filename, axisname, label):
 
 #--------------------------------------------------------------------------------------------------------------------
 class competition_FFT(object):
-    num_classes = 10
+    ######
+    num_classes = 5
+    ######
     inputchannel = 1
     def __init__(self, data_dir, transfer_task, normlizetype="0-1"):
         self.data_dir = data_dir
