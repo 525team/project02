@@ -1,53 +1,22 @@
-import torch
 import numpy as np
 import os
-from scipy import io
-import models
+# task: split source domain data (condition 0) in size 5*9*1024, and store the data in the source_domain_test.npy in the data directory
+read_training_samples = np.load('../2021_manufacturing_competition_data/training_samples.npy', allow_pickle=True).item()
+# read_validation_samples = read_training_samples['condition0']
+condition0_ball = read_training_samples['condition0']['ball']
+condition0_holder = np.array(read_training_samples['condition0']['holder'])
+condition0_inner = read_training_samples['condition0']['inner']
+condition0_normal = read_training_samples['condition0']['normal']
+condition0_outer = read_training_samples['condition0']['outer']
 
-
-# Model Configuration
-PATH = '.\checkpoint\DA\s_0_1_t2\cnn_features_1d_0927-190704\8-0.3333-best_model.pth'
-# trained_model = cnn_1d.CNN()
-
-# new version of load validation data
-read_validation_samples = np.load('../2021_manufacturing_competition_data/validation_samples.npy', allow_pickle=True).item()
-validation_samples_ball = read_validation_samples['ball']
-validation_samples_holder = read_validation_samples['holder']
-validation_samples_inner = read_validation_samples['inner']
-validation_samples_normal = read_validation_samples['normal']
-validation_samples_outer = read_validation_samples['outer']
-fault_name = ['inner', 'outer', 'ball', 'holder', 'normal']
-len_val_sample = 9
-
-# construct new code
-class predict_utils_classification():
-    def __init__(self, args, model_pth):
-        self.args = args
-        self.model_pth = model_pth
-
-    def setup(self):
-        args = self.args
-        # load model
-        self.model = getattr(models, args.model_name)(args.pretrained)
-        self.model.load_state_dict(torch.load(self.model_pth))
-        self.model.eval()
-
-    def predict(self, fault_num, val_sample_num_per_fault):
-        # predict data
-        correct = []
-        with torch.no_grad():
-            for i in range(fault_num):
-                correct_i = 0
-                for j in range(val_sample_num_per_fault):
-                    label_output = self.model(read_validation_samples[fault_name[i]][j])
-                    if label_output == i:
-                        correct_i += 1
-                correct.append(correct_i)
-
-            correct_rate = correct / val_sample_num_per_fault
-            correct_rate_overall = sum(correct_rate) / fault_num
-        return correct_rate_overall, correct_rate
-
-
-
-
+condition0_ball = np.array(np.array_split(condition0_ball[0:9216], 9))
+condition0_holder = np.array(np.array_split(condition0_holder[0:9216], 9))
+condition0_inner = np.array(np.array_split(condition0_inner[0:9216], 9))
+condition0_normal = np.array(np.array_split(condition0_normal[0:9216], 9))
+condition0_outer = np.array(np.array_split(condition0_outer[0:9216], 9))
+#
+training_part = {'ball': condition0_ball,'holder': condition0_holder,'inner': condition0_inner,'normal': condition0_normal,'outer': condition0_outer}
+os.chdir(r'D:\python\project02\2021_manufacturing_competition_data')
+np.save('training_part.npy',training_part)
+print(type(training_part))
+print(training_part)
